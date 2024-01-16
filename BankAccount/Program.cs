@@ -1,13 +1,14 @@
-﻿using System;
+﻿using BankAccount.UIComponent;
+using System;
 
 namespace BankAccount
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hellllo");
-
+            UI ui = new UI();
+            ui.HomePage();
         }
     }
 }
