@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BankAccount.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,15 +10,15 @@ namespace BankAccount.Repository
 {
     public class FakeDataBase
     {
-        public readonly ArrayList FakeDB;
+        public readonly List<User> FakeDB;
         public FakeDataBase()
         {
-            FakeDB = new ArrayList();
+            FakeDB = new List<User>();
         }
 
         public void DeleteUser()
         {
-
+           
         }
 
         public void UpdateUser()
@@ -31,6 +32,11 @@ namespace BankAccount.Repository
         }
 
         public void GetAllUsers()
+        {
+
+        }
+        
+        public void UserInfo()
         {
 
         }

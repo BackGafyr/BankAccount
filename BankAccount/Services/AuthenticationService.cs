@@ -20,7 +20,7 @@ namespace BankAccount.Services
         {
             Random rndm = new Random();
 
-            user.Id = new Guid();
+            user.Id = Guid.NewGuid();
             user.UserCard.Balance = 0;
             user.UserCard.CardCreatingTime = DateTime.Now;
             user.UserCard.CardEndingTime = user.UserCard.CardCreatingTime.AddYears(3);
@@ -31,9 +31,16 @@ namespace BankAccount.Services
             _fakeDb.FakeDB.Add(user);
         }
 
-        public void SignIn()
+        public bool SignIn(string email, string password)
         {
-            
+            foreach (var user in _fakeDb.FakeDB)
+            {
+                if (user.Email == email && user.Password == password)
+                {
+                    return true;
+                }
+            }         
+            return false;
         }
 
         public string EmailInput()

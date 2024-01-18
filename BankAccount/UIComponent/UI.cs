@@ -42,10 +42,12 @@ namespace BankAccount.UIComponent
 
                 if (operation == "1")
                 {
-                    SignUP(); break;
+                    User _user = new User();
+                    _user.UserCard = new Card();
+                    SignUP(_user);
                 }
                 else if (operation == "2"){
-                    SignIN(); break;
+                    SignIN();
                 } else { Console.WriteLine("Error, Try again...."); }
             }
         }
@@ -58,28 +60,50 @@ namespace BankAccount.UIComponent
             Console.WriteLine("--    1. Card To Card                       --");
             Console.WriteLine("--    2. Take money from Card               --");
             Console.WriteLine("--    3. Pay money to Card                  --");
-            Console.WriteLine("--    4. Delete User                        --");
-            Console.WriteLine("--    5. Update User                        --");
+            Console.WriteLine("--    4. Get Balance                        --");
+            Console.WriteLine("--    5. Delete User                        --");
+            Console.WriteLine("--    6. Update User                        --");
+            Console.WriteLine("--    7. User Information                   --");
+            Console.WriteLine("--    8. Exit                               --");
             Console.WriteLine("--                                          --");
             Console.WriteLine("----------------------------------------------");
 
             while (true)
             {
-                Console.WriteLine("Operation: ");
+                Console.Write("Operation: ");
                 string operation = Console.ReadLine();
 
-                if (operation == "1") { _bankService.CardToCard(); }
+                if (operation == "1") { _bankService.CardToCard(_au._fakeDb, _user); }
                 else if (operation == "2") { _bankService.TakeFromCard(); }
                 else if (operation == "3") { _bankService.PayToCard(); }
-                else if (operation == "4") { _au._fakeDb.DeleteUser(); }
-                else if (operation == "5") { _au._fakeDb.UpdateUser(); }
+                else if (operation == "4") { _bankService.GetBalance(); }
+                else if (operation == "5") { _au._fakeDb.DeleteUser(); }
+                else if (operation == "6") { _au._fakeDb.UpdateUser(); }
+                else if (operation == "7") { _au._fakeDb.UserInfo(); }
+                else if (operation == "8") { HomePage(); }
                 else { Console.WriteLine("Error, Try again..."); }
+                SecondPage();
             }
         }
 
-        public void SignUP()
+        public void SignUP(User _user)
         {
-            _user.Email = _au.EmailInput();
+            string email = _au.EmailInput();
+
+            int i = 0;
+
+            foreach (var user in _au._fakeDb.FakeDB)
+            {
+                if (email == user.Email)
+                    i++;
+            }
+
+            if (i  != 0)
+            {
+                Console.WriteLine("This email already used..."); SignUP(_user);
+            }
+            
+            _user.Email = email;
             _user.Name = _au.NameInput();
             _user.Surname =_au.SurnameInput();
             _user.Password = _au.PasswordConfirm(_au.PasswordInput());
@@ -94,7 +118,17 @@ namespace BankAccount.UIComponent
 
         public void SignIN()
         {
-            SecondPage();
+            string email = _au.EmailInput();
+            string password = _au.PasswordInput();
+
+            bool signInChecking = _au.SignIn(email, password);
+
+            if (signInChecking)
+            {
+                Console.WriteLine("Sign In is successful...");
+                SecondPage();
+            }
+            else { Console.WriteLine("User not found..."); Console.WriteLine(); HomePage(); }
         }
     }
 }
