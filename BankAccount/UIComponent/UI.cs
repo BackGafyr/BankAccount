@@ -13,13 +13,10 @@ namespace BankAccount.UIComponent
     public class UI
     {
         private readonly AuthenticationService _au;
-        private readonly User _user;
         private readonly BankService _bankService;
         public UI()
         {
             _au = new AuthenticationService();
-            _user = new User();
-            _user.UserCard = new Card();
             _bankService = new BankService();
         }
         public void HomePage()
@@ -52,19 +49,18 @@ namespace BankAccount.UIComponent
             }
         }
 
-        public void SecondPage()
+        public void SecondPage(User _user)
         {
             Console.WriteLine("----------------------------------------------");
             Console.WriteLine("--             Operations                   --");
             Console.WriteLine("--                                          --");
             Console.WriteLine("--    1. Card To Card                       --");
-            Console.WriteLine("--    2. Take money from Card               --");
-            Console.WriteLine("--    3. Pay money to Card                  --");
-            Console.WriteLine("--    4. Get Balance                        --");
-            Console.WriteLine("--    5. Delete User                        --");
-            Console.WriteLine("--    6. Update User                        --");
-            Console.WriteLine("--    7. User Information                   --");
-            Console.WriteLine("--    8. Exit                               --");
+            Console.WriteLine("--    2. Get Balance                        --");
+            Console.WriteLine("--    3. Delete User                        --");
+            Console.WriteLine("--    4. Update User                        --");
+            Console.WriteLine("--    5. User Information                   --");
+            Console.WriteLine("--    6. Change Password                    --");
+            Console.WriteLine("--    7. Log Out                            --");
             Console.WriteLine("--                                          --");
             Console.WriteLine("----------------------------------------------");
 
@@ -74,15 +70,14 @@ namespace BankAccount.UIComponent
                 string operation = Console.ReadLine();
 
                 if (operation == "1") { _bankService.CardToCard(_au._fakeDb, _user); }
-                else if (operation == "2") { _bankService.TakeFromCard(); }
-                else if (operation == "3") { _bankService.PayToCard(); }
-                else if (operation == "4") { _bankService.GetBalance(); }
-                else if (operation == "5") { _au._fakeDb.DeleteUser(); }
-                else if (operation == "6") { _au._fakeDb.UpdateUser(); }
-                else if (operation == "7") { _au._fakeDb.UserInfo(); }
-                else if (operation == "8") { HomePage(); }
+                else if (operation == "2") { _bankService.GetBalance(_au._fakeDb, _user.Id); }
+                else if (operation == "3") { _au._fakeDb.DeleteUser(_user); HomePage(); }
+                else if (operation == "4") { UpdateUserUI(_user); }
+                else if (operation == "5") { _au._fakeDb.UserInfo(_user); }
+                else if (operation == "6") { _au._fakeDb.ChangePassword(_user, _au); }
+                else if (operation == "7") { HomePage(); }
                 else { Console.WriteLine("Error, Try again..."); }
-                SecondPage();
+                SecondPage(_user);
             }
         }
 
@@ -108,7 +103,7 @@ namespace BankAccount.UIComponent
             _user.Surname =_au.SurnameInput();
             _user.Password = _au.PasswordConfirm(_au.PasswordInput());
 
-            _au.SignUp(_user);
+            _au.SignUp(_user);  
 
             Console.WriteLine("Sign Up is successfull...");
             Console.WriteLine();
@@ -121,14 +116,97 @@ namespace BankAccount.UIComponent
             string email = _au.EmailInput();
             string password = _au.PasswordInput();
 
-            bool signInChecking = _au.SignIn(email, password);
+            User user = _au.SignIn(email, password);
 
-            if (signInChecking)
+            if (user != null)
             {
                 Console.WriteLine("Sign In is successful...");
-                SecondPage();
+                SecondPage(user);
             }
             else { Console.WriteLine("User not found..."); Console.WriteLine(); HomePage(); }
+        }
+
+        public void UpdateUserUI(User _user)
+        {
+            Console.WriteLine("----------------------------------------------");
+            Console.WriteLine("--             Operations                   --");
+            Console.WriteLine("--                                          --");
+            Console.WriteLine("--   1. Change Email                        --");
+            Console.WriteLine("--   2. Change Name                         --");
+            Console.WriteLine("--   3. Change Surname                      --");
+            Console.WriteLine("--                                          --");
+            Console.WriteLine("----------------------------------------------");
+
+            while (true)
+            {
+                Console.Write("Operation: ");
+                string operation = Console.ReadLine();
+
+                if (operation == "1")
+                {
+                    string email = _au.EmailInput();
+                    
+                    if (email == _user.Email)
+                    {
+                        Console.WriteLine("You are already using this email");
+                    } else 
+                    { 
+                        _user.Email = email;
+                        Console.WriteLine();
+                        Console.WriteLine("----------------------------");
+                        Console.WriteLine("Email Changed Successfully");
+                        Console.WriteLine("----------------------------");
+                        Console.WriteLine();
+
+                        _au._fakeDb.UpdateUser(_user);
+                    }
+                } 
+                else if (operation == "2")
+                {
+                    string name = _au.NameInput();
+
+                    if (name == _user.Name)
+                    {
+                        Console.WriteLine("You are already using this name");
+                    }
+                    else
+                    {
+                        _user.Name = name;
+                        Console.WriteLine();
+                        Console.WriteLine("----------------------------");
+                        Console.WriteLine("Name Changed Successfully");
+                        Console.WriteLine("----------------------------");
+                        Console.WriteLine();
+
+                        _au._fakeDb.UpdateUser(_user);
+                    }
+                }
+                else if (operation == "3")
+                {
+                    string surname = _au.SurnameInput();
+
+                    if (surname == _user.Surname)
+                    {
+                        Console.WriteLine("You are already using this surname");
+                    }
+                    else
+                    {
+                        _user.Surname = surname;
+                        Console.WriteLine();
+                        Console.WriteLine("----------------------------");
+                        Console.WriteLine("Surname Changed Successfully");
+                        Console.WriteLine("----------------------------");
+                        Console.WriteLine();
+
+                        _au._fakeDb.UpdateUser(_user);
+                    }
+                } 
+                else { Console.WriteLine("Uncorrect Operation..."); }
+
+                Console.Write("Click 1 ---> Exit Update User Page: ");
+                string exit = Console.ReadLine();
+                if (exit == "1") { break; }
+            }
         }
     }
 }

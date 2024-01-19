@@ -1,10 +1,7 @@
 ﻿using BankAccount.Model;
 using BankAccount.Repository;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BankAccount.Services
 {
@@ -25,22 +22,35 @@ namespace BankAccount.Services
             user.UserCard.CardCreatingTime = DateTime.Now;
             user.UserCard.CardEndingTime = user.UserCard.CardCreatingTime.AddYears(3);
             user.UserCard.Cvv = rndm.Next(100, 1000);
-            user.UserCard.CardId = rndm.Next(1000, 10000).ToString() + rndm.Next(1000, 10000).ToString() 
-                + rndm.Next(1000, 1000).ToString() + rndm.Next(1000, 1000).ToString();
+            user.UserCard.CardId = rndm.Next(1000, 10000).ToString() + rndm.Next(1000, 10000).ToString()
+                + rndm.Next(1000, 10000).ToString() + rndm.Next(1000, 10000).ToString();
 
             _fakeDb.FakeDB.Add(user);
         }
 
-        public bool SignIn(string email, string password)
+        public User SignIn(string email, string password)
         {
             foreach (var user in _fakeDb.FakeDB)
             {
                 if (user.Email == email && user.Password == password)
                 {
-                    return true;
+                    return user;
                 }
-            }         
-            return false;
+            }
+            return null;
+        }
+
+        public bool DeleteUser(string userId)
+        {
+            var user = _fakeDb.GetUserWithId(Guid.Parse(userId));
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            _fakeDb.DeleteUser(user);
+            return true;
         }
 
         public string EmailInput()
@@ -64,9 +74,11 @@ namespace BankAccount.Services
                         if ((email.Substring(0, email.Length - 12).All(Char.IsLetter)))
                         {
                             return email;
-                        } else { Console.WriteLine("Error, Try again..."); }
-                    } else { Console.WriteLine("Error, Try again..."); }
-                } 
+                        }
+                        else { Console.WriteLine("Error, Try again..."); }
+                    }
+                    else { Console.WriteLine("Error, Try again..."); }
+                }
                 catch (ArgumentOutOfRangeException)
                 {
                     Console.WriteLine("Error, Try again...");
@@ -84,10 +96,11 @@ namespace BankAccount.Services
                 if (!string.IsNullOrEmpty(name))
                 {
                     if (name.All(Char.IsLetter))
-                    {
                         return name;
-                    } else { Console.WriteLine("Error, Try again..."); }
-                } else { Console.WriteLine("Error, Try again..."); }
+                    else 
+                    { Console.WriteLine("Error, Try again..."); }
+                }
+                else { Console.WriteLine("Error, Try again..."); }
             }
         }
 
@@ -101,9 +114,8 @@ namespace BankAccount.Services
                 if (!string.IsNullOrEmpty(surname))
                 {
                     if (surname.All(Char.IsLetter))
-                    {
                         return surname;
-                    }
+
                     else { Console.WriteLine("Error, Try again..."); }
                 }
                 else { Console.WriteLine("Error, Try again..."); }
@@ -118,11 +130,12 @@ namespace BankAccount.Services
                 string password = Console.ReadLine();
 
                 if (!string.IsNullOrEmpty(password))
-                {
                     return password;
-                } else { Console.WriteLine("Error, Try again..."); }
+
+                else { Console.WriteLine("Error, Try again..."); }
             }
         }
+
         public string PasswordConfirm(string password)
         {
             while (true)
@@ -136,8 +149,10 @@ namespace BankAccount.Services
                     if (passwordConfirm == password)
                     {
                         return passwordConfirm;
-                    } else { Console.WriteLine("Error, Try again..."); }
-                } else { Console.WriteLine("Error, Try again..."); }
+                    }
+                    else { Console.WriteLine("Error, Try again..."); }
+                }
+                else { Console.WriteLine("Error, Try again..."); }
             }
         }
     }
