@@ -1,13 +1,7 @@
 ﻿using BankAccount.Model;
 using BankAccount.Services;
-using Microsoft.VisualBasic;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BankAccount.Repository
 {
@@ -31,9 +25,9 @@ namespace BankAccount.Repository
             return _user;
         }
 
-        public void ChangePassword(User _user, AuthenticationService _au)
+        public void ChangePassword(User _user, string password)
         {
-            string newPassword = _au.PasswordInput();
+            string newPassword = password;
 
             if (newPassword == _user.Password) 
             {
@@ -58,24 +52,6 @@ namespace BankAccount.Repository
                     return user;
             }
             return null;
-        }
-        
-        public void UserInfo(User _user)
-        {
-            Console.WriteLine();
-            Console.WriteLine("-----------------------------------------------------");
-            Console.WriteLine("             USER INFORMATION             ");
-            Console.WriteLine($"Name: {_user.Name}");
-            Console.WriteLine($"Surname: {_user.Surname}");
-            Console.WriteLine($"Email Adress: {_user.Email}");
-            Console.WriteLine($"Password: {_user.Password}");
-            Console.WriteLine($"Card ID: {_user.UserCard.CardId}");
-            Console.WriteLine($"Balance: {_user.UserCard.Balance}");
-            Console.WriteLine($"Card Cvv: {_user.UserCard.Cvv}");
-            Console.WriteLine($"Card Creating Date: {_user.UserCard.CardCreatingTime}");
-            Console.WriteLine($"Card Ending Date: {_user.UserCard.CardEndingTime}");
-            Console.WriteLine("-----------------------------------------------------");
-            Console.WriteLine();
         }
     }
 }

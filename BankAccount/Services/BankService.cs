@@ -10,59 +10,50 @@ namespace BankAccount.Services
 {
     public class BankService
     {
-        public void CardToCard(FakeDataBase _db, User _user)
+        public FakeDataBase FakeDataBase { get; set; }
+
+        public bool IDCheck(User _user, string id)
         {
-            while (true)
+            if (id.Length == 16 && id.All(Char.IsDigit))
             {
-                int count = 0;
-                Console.Write("Card ID: ");
-                string id = Console.ReadLine();
-
-                if (id.Length == 16 && id.All(Char.IsDigit))
+                foreach (var user in FakeDataBase.FakeDB)
                 {
-                    if (id == _user.UserCard.CardId)
+                    if ((user != _user) && (user.UserCard.CardId == id))
                     {
-                        Console.WriteLine("Error...");
+                        return true;
                     }
-                    else
-                    {
-                        foreach (var user in _db.FakeDB)
-                        {
-                            if (user.UserCard.CardId == id)
-                            {
-                                count++;
-                                Console.Write("Amount Of Money: ");
-                                int money = Convert.ToInt32(Console.ReadLine());
-                                user.UserCard.Balance += money;
-                            }
-                        }
-                        if (count == 0) { Console.WriteLine("User not found..."); }
-                    }
-                }else { Console.WriteLine("The syntax of ID is uncorrect..."); }
+                }
+                return false;
+            }
+            else
+                return false;
+        }
 
-                Console.Write("Click 1 --> Exit: ");
-                string exit = Console.ReadLine();
-                if (exit == "1") { break; }
+        public void CardToCard(int money, string id)
+        {
+            foreach (var user in FakeDataBase.FakeDB)
+            {
+                if (user.UserCard.CardId == id)
+                {
+                    user.UserCard.Balance += money;
+                }
             }
         }
 
-        public void GetBalance(FakeDataBase _db, Guid ID)
+        public int GetBalance(Guid ID)
         {
             int count = 0;
 
-            foreach (var user in _db.FakeDB)
+            foreach (var user in FakeDataBase.FakeDB)
             {
                 if (ID == user.Id)
                 {
                     count++;
-                    Console.WriteLine();
-                    Console.WriteLine("---------------------");
-                    Console.WriteLine($"Balance: {user.UserCard.Balance}$");
-                    Console.WriteLine("---------------------");
-                    Console.WriteLine();
+                    return user.UserCard.Balance;
                 }
             }
-            if (count == 0) { Console.WriteLine("User not found"); }
+            if (count == 0) { return -1; }
+            return -1;
         }
     }
 }

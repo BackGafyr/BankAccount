@@ -8,6 +8,7 @@ namespace BankAccount.Services
     public class AuthenticationService
     {
         public FakeDataBase _fakeDb;
+
         public AuthenticationService()
         {
             _fakeDb = new FakeDataBase();
@@ -40,9 +41,9 @@ namespace BankAccount.Services
             return null;
         }
 
-        public bool DeleteUser(string userId)
+        public bool DeleteUser(Guid userId)
         {
-            var user = _fakeDb.GetUserWithId(Guid.Parse(userId));
+            var user = _fakeDb.GetUserWithId(userId);
 
             if (user == null)
             {
@@ -53,107 +54,86 @@ namespace BankAccount.Services
             return true;
         }
 
-        public string EmailInput()
+        public User GetUserById(Guid userId)
         {
-            while (true)
+            var user = _fakeDb.GetUserWithId(userId);
+            return user;
+        }
+
+        public string EmailCheck(string email)
+        {
+            int count = 0;
+
+            try
             {
-                Console.Write("Email: ");
-                string email = Console.ReadLine();
-
-                int count = 0;
-
-                try
+                for (int i = 0; i < email.Length; i++)
                 {
-                    for (int i = 0; i < email.Length; i++)
+                    if (email[i] == '@') { count = i; break; }
+                }
+
+                if (((email.Substring(count, 12) == "@outlook.com") || (email.Substring(count, 12) == "@hotmail.com")) && email.Length > 12)
+                {
+                    if ((email.Substring(0, email.Length - 12).All(Char.IsLetter)))
                     {
-                        if (email[i] == '@') { count = i; break; }
+                        return email;
                     }
-
-                    if (((email.Substring(count, 12) == "@outlook.com") || (email.Substring(count, 12) == "@hotmail.com")) && email.Length > 12)
-                    {
-                        if ((email.Substring(0, email.Length - 12).All(Char.IsLetter)))
-                        {
-                            return email;
-                        }
-                        else { Console.WriteLine("Error, Try again..."); }
-                    }
-                    else { Console.WriteLine("Error, Try again..."); }
+                    else { return null; }
                 }
-                catch (ArgumentOutOfRangeException)
-                {
-                    Console.WriteLine("Error, Try again...");
-                }
+                else { return null; }
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
             }
         }
 
-        public string NameInput()
+        public string NameCheck(string name)
         {
-            while (true)
+            if (!string.IsNullOrEmpty(name))
             {
-                Console.Write("Name: ");
-                string name = Console.ReadLine();
-
-                if (!string.IsNullOrEmpty(name))
+                if (name.All(Char.IsLetter))
                 {
-                    if (name.All(Char.IsLetter))
-                        return name;
-                    else 
-                    { Console.WriteLine("Error, Try again..."); }
+                    return name;
                 }
-                else { Console.WriteLine("Error, Try again..."); }
+                else
+                {
+                    return null;
+                }
             }
+            else { return null; }
         }
 
-        public string SurnameInput()
+        public string SurnameCheck(string surname)
         {
-            while (true)
+            if (!string.IsNullOrEmpty(surname))
             {
-                Console.Write("Surname: ");
-                string surname = Console.ReadLine();
+                if (surname.All(Char.IsLetter))
+                    return surname;
 
-                if (!string.IsNullOrEmpty(surname))
-                {
-                    if (surname.All(Char.IsLetter))
-                        return surname;
-
-                    else { Console.WriteLine("Error, Try again..."); }
-                }
-                else { Console.WriteLine("Error, Try again..."); }
+                else { return null; }
             }
+            else { return null; }
         }
 
-        public string PasswordInput()
+        public string PasswordCheck(string password)
         {
-            while (true)
-            {
-                Console.Write("Password: ");
-                string password = Console.ReadLine();
+            if (!string.IsNullOrEmpty(password))
+                return password;
 
-                if (!string.IsNullOrEmpty(password))
-                    return password;
-
-                else { Console.WriteLine("Error, Try again..."); }
-            }
+            else { return null; }
         }
 
-        public string PasswordConfirm(string password)
+        public string PasswordConfirmCheck(string passwordConfirm, string password)
         {
-            while (true)
+            if (!string.IsNullOrEmpty(passwordConfirm))
             {
-                Console.Write("Confirm password: ");
-                string passwordConfirm = Console.ReadLine();
-                Console.WriteLine();
-
-                if (!string.IsNullOrEmpty(passwordConfirm))
+                if (passwordConfirm == password)
                 {
-                    if (passwordConfirm == password)
-                    {
-                        return passwordConfirm;
-                    }
-                    else { Console.WriteLine("Error, Try again..."); }
+                    return passwordConfirm;
                 }
-                else { Console.WriteLine("Error, Try again..."); }
+                else { return null; }
             }
+            else { return null; }
         }
     }
 }
