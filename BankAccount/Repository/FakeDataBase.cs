@@ -19,23 +19,6 @@ namespace BankAccount.Repository
             FakeDB = new List<User>();
         }
 
-        //public void DeleteUser(User _user)
-        //{
-        //   foreach (var user in FakeDB)
-        //    {
-        //        if (user == _user)
-        //        {
-        //            FakeDB.Remove(user);
-        //            Console.WriteLine();
-        //            Console.WriteLine("--------------------");
-        //            Console.WriteLine("User Deleted...");
-        //            Console.WriteLine("--------------------");
-        //            Console.WriteLine();
-        //        }
-        //        break;
-        //    }
-        //}
-
         public string DeleteUser(User user)
         {
             string resposeId = user.Id.ToString();
