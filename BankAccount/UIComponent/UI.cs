@@ -77,7 +77,7 @@ namespace BankAccount.UIComponent
                 else if (operation == "2") { GetBalanceUI(_user); }
                 else if (operation == "3") { DeleteUserUI(_user); }
                 else if (operation == "4") { UpdateUserUI(_user); }
-                else if (operation == "5") {  }
+                else if (operation == "5") { UserInfo(_user); }
                 else if (operation == "6") { _au._fakeDb.ChangePassword(_user, Password()); }
                 else if (operation == "7") { HomePage(); }
                 else { Console.WriteLine("Error, Try again..."); }
@@ -292,6 +292,24 @@ namespace BankAccount.UIComponent
                     if (exit == "1") { break; }
                 }
             }
+        }
+
+        public void UserInfo(User user)
+        {
+            Console.WriteLine("-------------------------------------------------------------");
+            Console.WriteLine("--           Information");
+            Console.WriteLine("--");
+            Console.WriteLine($"--  Name: {user.Name}");
+            Console.WriteLine($"--  Surname: {user.Surname}");
+            Console.WriteLine($"--  Email: {user.Email}");
+            Console.WriteLine($"--  Password: {user.Password}");
+            Console.WriteLine($"--  Card ID: {user.UserCard.CardId}");
+            Console.WriteLine($"--  Card Cvv: {user.UserCard.Cvv}");
+            Console.WriteLine($"--  Card Creating Date: {user.UserCard.CardCreatingTime}");
+            Console.WriteLine($"--  Card Ending Date: {user.UserCard.CardEndingTime}");
+            Console.WriteLine("--");
+            Console.WriteLine("-------------------------------------------------------------");
+            Console.WriteLine();
         }
 
         public string Name()
