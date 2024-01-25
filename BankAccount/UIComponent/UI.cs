@@ -78,7 +78,7 @@ namespace BankAccount.UIComponent
                 else if (operation == "3") { DeleteUserUI(_user); }
                 else if (operation == "4") { UpdateUserUI(_user); }
                 else if (operation == "5") { UserInfo(_user); }
-                else if (operation == "6") { _au._fakeDb.ChangePassword(_user, Password()); }
+                else if (operation == "6") { ChangePassword(_user); }
                 else if (operation == "7") { HomePage(); }
                 else { Console.WriteLine("Error, Try again..."); }
                 SecondPage(_user);
@@ -171,90 +171,14 @@ namespace BankAccount.UIComponent
 
                 SecondPage(user);
             }
-            else { Console.WriteLine("User not found..."); Console.WriteLine(); HomePage(); }
-        }
-
-        public void UpdateUserUI(User _user)
-        {
-            Console.WriteLine("----------------------------------------------");
-            Console.WriteLine("--             Operations                   --");
-            Console.WriteLine("--                                          --");
-            Console.WriteLine("--   1. Change Email                        --");
-            Console.WriteLine("--   2. Change Name                         --");
-            Console.WriteLine("--   3. Change Surname                      --");
-            Console.WriteLine("--                                          --");
-            Console.WriteLine("----------------------------------------------");
-
-            while (true)
+            else
             {
-                Console.Write("Operation: ");
-                string operation = Console.ReadLine();
-
-                if (operation == "1")
-                {
-                    string email = Email();
-
-                    if (email == _user.Email)
-                    {
-                        Console.WriteLine("You are already using this email");
-                    }
-                    else
-                    {
-                        _user.Email = email;
-                        Console.WriteLine();
-                        Console.WriteLine("----------------------------");
-                        Console.WriteLine("Email Changed Successfully");
-                        Console.WriteLine("----------------------------");
-                        Console.WriteLine();
-
-                        _au._fakeDb.UpdateUser(_user);
-                    }
-                }
-                else if (operation == "2")
-                {
-                    string name = Name();
-
-                    if (name == _user.Name)
-                    {
-                        Console.WriteLine("You are already using this name");
-                    }
-                    else
-                    {
-                        _user.Name = name;
-                        Console.WriteLine();
-                        Console.WriteLine("----------------------------");
-                        Console.WriteLine("Name Changed Successfully");
-                        Console.WriteLine("----------------------------");
-                        Console.WriteLine();
-
-                        _au._fakeDb.UpdateUser(_user);
-                    }
-                }
-                else if (operation == "3")
-                {
-                    string surname = Surname();
-
-                    if (surname == _user.Surname)
-                    {
-                        Console.WriteLine("You are already using this surname");
-                    }
-                    else
-                    {
-                        _user.Surname = surname;
-                        Console.WriteLine();
-                        Console.WriteLine("----------------------------");
-                        Console.WriteLine("Surname Changed Successfully");
-                        Console.WriteLine("----------------------------");
-                        Console.WriteLine();
-
-                        _au._fakeDb.UpdateUser(_user);
-                    }
-                }
-                else { Console.WriteLine("Uncorrect Operation..."); }
-
-                Console.Write("Click 1 ---> Exit Update User Page: ");
-                string exit = Console.ReadLine();
-                if (exit == "1") { break; }
+                Console.WriteLine();
+                Console.WriteLine("-----------------------");
+                Console.WriteLine("User not found...");
+                Console.WriteLine("-----------------------");
+                Console.WriteLine(); 
+                HomePage(); 
             }
         }
 
@@ -310,6 +234,137 @@ namespace BankAccount.UIComponent
             Console.WriteLine("--");
             Console.WriteLine("-------------------------------------------------------------");
             Console.WriteLine();
+        }
+
+        public void UpdateUserUI(User user)
+        {
+            Console.WriteLine("----------------------------------------------");
+            Console.WriteLine("--             Operations                   --");
+            Console.WriteLine("--                                          --");
+            Console.WriteLine("--   1. Change Email                        --");
+            Console.WriteLine("--   2. Change Name                         --");
+            Console.WriteLine("--   3. Change Surname                      --");
+            Console.WriteLine("--                                          --");
+            Console.WriteLine("----------------------------------------------");
+
+            while (true)
+            {
+                Console.Write("Operation: ");
+                string operation = Console.ReadLine();
+
+                if (operation == "1") { UpdateEmail(user); }
+                else if (operation == "2") { UpdateName(user); }
+                else if (operation == "3") { UpdateSurname(user); }
+                else { Console.WriteLine("Error..."); }
+            }
+
+        }
+
+        public void UpdateEmail(User user)
+        {
+            string email = Email();
+
+            bool checkEmail = _au.UpdateEmailChecking(email, user);
+
+            if (checkEmail)
+            {
+                Console.WriteLine();
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("Email changed...");
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine();
+                SecondPage(user);
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("-------------------------------------");
+                Console.WriteLine("You are already use this email");
+                Console.WriteLine("-------------------------------------");
+                Console.WriteLine();
+                SecondPage(user); 
+            }
+        }
+
+        public void UpdateName(User user)
+        {
+            string name = Name();
+
+            bool checkName = _au.UpdateNameChecking(name, user);
+
+            if (checkName)
+            {
+                Console.WriteLine();
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("Name changed...");
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine();
+                SecondPage(user);
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("-------------------------------------");
+                Console.WriteLine("You are already use this Name");
+                Console.WriteLine("-------------------------------------");
+                Console.WriteLine();
+                SecondPage(user);
+            }
+        }
+
+        public void UpdateSurname(User user)
+        {
+            string surname = Surname(); 
+
+            bool checkSurname = _au.UpdateSurnameChecking(surname, user);
+
+            if (checkSurname)
+            {
+                Console.WriteLine();
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine("Surname changed...");
+                Console.WriteLine("-------------------------------");
+                Console.WriteLine();
+                SecondPage(user);
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("-------------------------------------");
+                Console.WriteLine("You are already use this Surname");
+                Console.WriteLine("-------------------------------------");
+                Console.WriteLine();
+                SecondPage(user);
+            }
+        }
+
+        public void ChangePassword(User user)
+        {
+            while (true)
+            {
+                string password = Password();
+
+                bool passCheck = _au.ChangePasswordChecking(password, user);
+
+                if (passCheck)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("-------------------------------");
+                    Console.WriteLine("Password changed...");
+                    Console.WriteLine("-------------------------------");
+                    Console.WriteLine();
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("--------------------------------------");
+                    Console.WriteLine("You are already use this Password");
+                    Console.WriteLine("--------------------------------------");
+                    Console.WriteLine();
+                    break;
+                }
+            }
         }
 
         public string Name()

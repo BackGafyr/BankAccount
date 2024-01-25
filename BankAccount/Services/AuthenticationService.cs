@@ -60,6 +60,50 @@ namespace BankAccount.Services
             return user;
         }
 
+        public bool ChangePasswordChecking(string password, User user)
+        {
+            if (password == user.Password)
+                return false;
+            else
+            {
+                user.Password = password;
+                return true;
+            } 
+        }
+
+        public bool UpdateEmailChecking(string email, User user)
+        {
+            if (email == user.Email)
+                return false;
+            else
+            {
+                user.Email = email;
+                return true;
+            }
+        }
+
+        public bool UpdateNameChecking(string name, User user)
+        {
+            if (name == user.Name)
+                return false;
+            else
+            {
+                user.Name = name;
+                return true;
+            }
+        }
+
+        public bool UpdateSurnameChecking(string surname, User user)
+        {
+            if (surname == user.Surname)
+                return false;
+            else
+            {
+                user.Surname = surname; 
+                return true;
+            }
+        }
+
         public string EmailCheck(string email)
         {
             int count = 0;

@@ -20,30 +20,6 @@ namespace BankAccount.Repository
             return resposeId;
         }
 
-        public User UpdateUser(User _user)
-        {
-            return _user;
-        }
-
-        public void ChangePassword(User _user, string password)
-        {
-            string newPassword = password;
-
-            if (newPassword == _user.Password) 
-            {
-                Console.WriteLine("You are already using this password");
-            } else
-            {
-                _user.Password = newPassword;
-
-                Console.WriteLine();
-                Console.WriteLine("----------------------------");
-                Console.WriteLine("Password Changed Successfully");
-                Console.WriteLine("----------------------------");
-                Console.WriteLine();
-            }
-        }
-
         public User GetUserWithId(Guid ID)
         {
             foreach (var user in FakeDB)
