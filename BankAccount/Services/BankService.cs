@@ -19,9 +19,7 @@ namespace BankAccount.Services
                 foreach (var user in FakeDataBase.FakeDB)
                 {
                     if ((user != _user) && (user.UserCard.CardId == id))
-                    {
                         return true;
-                    }
                 }
                 return false;
             }
@@ -34,9 +32,7 @@ namespace BankAccount.Services
             foreach (var user in FakeDataBase.FakeDB)
             {
                 if (user.UserCard.CardId == id)
-                {
                     user.UserCard.Balance += money;
-                }
             }
         }
 

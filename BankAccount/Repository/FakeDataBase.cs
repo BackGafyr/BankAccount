@@ -29,5 +29,20 @@ namespace BankAccount.Repository
             }
             return null;
         }
+
+        public User UpdateUser(User _user, string email, string name, string surname)
+        {
+            foreach (var user in FakeDB)
+            {
+                if (_user == user)
+                {
+                    user.Email = email;
+                    user.Name = name;
+                    user.Surname = surname;
+                    return user;
+                }
+            }
+            return null;
+        }
     }
 }

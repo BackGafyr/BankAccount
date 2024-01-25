@@ -257,7 +257,6 @@ namespace BankAccount.UIComponent
                 else if (operation == "3") { UpdateSurname(user); }
                 else { Console.WriteLine("Error..."); }
             }
-
         }
 
         public void UpdateEmail(User user)

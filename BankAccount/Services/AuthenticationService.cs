@@ -71,13 +71,18 @@ namespace BankAccount.Services
             } 
         }
 
+        public void UpdateUser(User _user, string email, string name, string surname)
+        {
+            _fakeDb.UpdateUser(_user, email, name, surname);
+        }
+
         public bool UpdateEmailChecking(string email, User user)
         {
             if (email == user.Email)
                 return false;
             else
             {
-                user.Email = email;
+                UpdateUser(user, email, user.Name, user.Surname);
                 return true;
             }
         }
@@ -88,7 +93,7 @@ namespace BankAccount.Services
                 return false;
             else
             {
-                user.Name = name;
+                UpdateUser(user, user.Email, name, user.Surname);
                 return true;
             }
         }
@@ -99,7 +104,7 @@ namespace BankAccount.Services
                 return false;
             else
             {
-                user.Surname = surname; 
+                UpdateUser(user, user.Email, user.Name, surname);
                 return true;
             }
         }
